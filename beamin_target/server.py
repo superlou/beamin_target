@@ -18,10 +18,12 @@ def start():
 
 @app.route("/info-beamer/stop")
 def stop():
+    app.config['ibs'].stop()
     return "stopping"
 
 @app.route("/info-beamer/restarting")
 def restart():
+    app.config['ibs'].restart()
     return "restarting"
 
 @app.route("/node/push", methods=['GET', 'POST'])

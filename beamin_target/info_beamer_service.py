@@ -6,6 +6,18 @@ class InfoBeamerService():
         self.config = config
         self.cmd = config["info_beamer_cmd"]
         self.node_path = 'node'
+        self.process = None
 
     def start(self):
-        subprocess.run([self.cmd, self.node_path], stderr=subprocess.STDOUT)
+        if self.process is None:
+            self.process = subprocess.Popen([self.cmd, self.node_path],
+                                            stderr=subprocess.STDOUT)
+
+    def stop(self):
+        if self.process:
+            self.process.terminate()
+            self.process = None
+
+    def restart(self):
+        self.stop()
+        self.start()
