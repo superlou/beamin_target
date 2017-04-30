@@ -26,6 +26,13 @@ def restart():
     app.config['ibs'].restart()
     return "restarting"
 
+@app.route("/info-beamer/status")
+def status():
+    if app.config['ibs'].is_running():
+        return "running"
+    else:
+        return "not running"
+
 @app.route("/node/push", methods=['GET', 'POST'])
 def receive_node():
     if request.method != 'POST':

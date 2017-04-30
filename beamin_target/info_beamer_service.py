@@ -21,3 +21,13 @@ class InfoBeamerService():
     def restart(self):
         self.stop()
         self.start()
+
+    def is_running(self):
+        if not self.process:
+            return False
+
+        if self.process.poll():
+            # poll sets and returns returncode if the process has terminated
+            return False
+        else:
+            return True
