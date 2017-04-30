@@ -42,6 +42,10 @@ def receive_node():
         return Response('Expected node.zip')
 
     node_file = request.files['node.zip']
+
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+	    os.makedirs(app.config['UPLOAD_FOLDER'])
+
     node_file_upload_path = os.path.join(app.config['UPLOAD_FOLDER'], 'node.zip')
     node_file.save(node_file_upload_path)
     with zipfile.ZipFile(node_file_upload_path) as zipped_node:
@@ -57,8 +61,8 @@ def main():
     app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.config['NODE_FOLDER'] = 'node'
-    app.config['DEBUG'] = True
-    app.run(port=8907)
+    app.config['DEBUG'] = True  # todo Change this.  It's super unsafe.
+    app.run(host='0.0.0.0', port=8907)
 
 
 if __name__ == '__main__':

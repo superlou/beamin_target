@@ -1,3 +1,4 @@
 {
-  "info_beamer_cmd": "info-beamer"
+  "info_beamer_cmd": "../info-beamer-pi/info-beamer",
+  "raspberry_pi": true
 }

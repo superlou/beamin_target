@@ -1,17 +1,25 @@
 import subprocess
+import os
 
 
 class InfoBeamerService():
     def __init__(self, config):
         self.config = config
-        self.cmd = config["info_beamer_cmd"]
+        self.cmd = config.get('info_beamer_cmd', 'info-beamer')
+        self.is_raspberry_pi = config.get('raspberry_pi', True)
         self.node_path = 'node'
         self.process = None
 
     def start(self):
         if self.process is None:
+            env = os.environ.copy()
+
+            if self.is_raspberry_pi:
+                env['INFOBEAMER_BLANK_MODE'] = 'layer'
+
             self.process = subprocess.Popen([self.cmd, self.node_path],
-                                            stderr=subprocess.STDOUT)
+                                            stderr=subprocess.STDOUT,
+                                            env=env)
 
     def stop(self):
         if self.process:
