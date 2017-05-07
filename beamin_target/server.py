@@ -4,6 +4,7 @@ import os
 import zipfile
 from flask import Flask, Response, request
 from .info_beamer_service import InfoBeamerService
+from .node_services import NodeServices
 
 app = Flask(__name__)
 
@@ -14,16 +15,19 @@ def ping():
 @app.route("/info-beamer/start")
 def start():
     app.config['ibs'].start()
+    app.config['ns'].start()
     return Response("Starting")
 
 @app.route("/info-beamer/stop")
 def stop():
     app.config['ibs'].stop()
+    app.config['ns'].stop()
     return "stopping"
 
 @app.route("/info-beamer/restarting")
 def restart():
     app.config['ibs'].restart()
+    app.config['ns'].restart()
     return "restarting"
 
 @app.route("/info-beamer/status")
@@ -56,8 +60,8 @@ def receive_node():
 
 def main():
     config = json.load(open('config.json'))
-    ibs = InfoBeamerService(config)
-    app.config['ibs'] = ibs
+    app.config['ibs'] = InfoBeamerService(config, 'node')
+    app.config['ns'] = NodeServices('node')
     app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
     app.config['UPLOAD_FOLDER'] = 'uploads'
     app.config['NODE_FOLDER'] = 'node'

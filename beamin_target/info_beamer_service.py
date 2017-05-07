@@ -3,11 +3,11 @@ import os
 
 
 class InfoBeamerService():
-    def __init__(self, config):
+    def __init__(self, config, node_path='node'):
         self.config = config
         self.cmd = config.get('info_beamer_cmd', 'info-beamer')
         self.is_raspberry_pi = config.get('raspberry_pi', True)
-        self.node_path = 'node'
+        self.node_path = node_path
         self.process = None
 
     def start(self):
