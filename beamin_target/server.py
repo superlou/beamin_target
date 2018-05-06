@@ -2,7 +2,9 @@
 import json
 import os
 import zipfile
+import threading
 from flask import Flask, Response, request
+from . import ssdp
 from .info_beamer_service import InfoBeamerService
 from .node_services import NodeServices
 
@@ -60,6 +62,12 @@ def receive_node():
 
 def main():
     config = json.load(open('config.json'))
+
+    t = threading.Thread(target=ssdp.worker, args=(config,))
+    t.daemon = True
+    t.start()
+
+
     app.config['ibs'] = InfoBeamerService(config, 'node')
     app.config['ns'] = NodeServices('node')
     app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
