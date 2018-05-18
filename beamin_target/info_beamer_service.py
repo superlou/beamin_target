@@ -1,5 +1,6 @@
 import subprocess
 import os
+import socket
 
 
 class InfoBeamerService():
@@ -13,6 +14,8 @@ class InfoBeamerService():
     def start(self):
         if self.process is None:
             env = os.environ.copy()
+
+            env['INFOBEAMER_ENV_NAME'] = socket.gethostname()
 
             if self.is_raspberry_pi:
                 env['INFOBEAMER_BLANK_MODE'] = 'layer'
