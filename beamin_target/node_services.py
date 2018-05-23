@@ -11,16 +11,16 @@ class NodeServices():
     def start(self):
         self.stop()
 
-        for service in self.get_services() :
-            service_path = os.path.join(self.node_path, service)
-            process = subprocess.Popen(['python3', service_path])
+        for service in self.get_services():
+            cwd = self.node_path
+            process = subprocess.Popen(['python3', service], cwd=cwd)
             self.processes.append(process)
 
     def stop(self):
         for process in self.processes:
             process.terminate()
 
-    def restart():
+    def restart(self):
         self.stop()
         self.start()
 
