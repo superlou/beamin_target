@@ -10,9 +10,11 @@ from .node_services import NodeServices
 
 app = Flask(__name__)
 
+
 @app.route("/ping")
 def ping():
     return "pong"
+
 
 @app.route("/info-beamer/start")
 def start():
@@ -20,17 +22,38 @@ def start():
     app.config['ns'].start()
     return Response("Starting")
 
+
 @app.route("/info-beamer/stop")
 def stop():
     app.config['ibs'].stop()
     app.config['ns'].stop()
     return "stopping"
 
-@app.route("/info-beamer/restarting")
+
+@app.route("/info-beamer/restart")
 def restart():
     app.config['ibs'].restart()
     app.config['ns'].restart()
     return "restarting"
+
+
+@app.route("/services/start")
+def start_services():
+    app.config['ns'].start()
+    return Response("Starting services")
+
+
+@app.route("/services/stop")
+def stop_services():
+    app.config['ns'].stop()
+    return Response("Stopping services")
+
+
+@app.route("/services/restart")
+def restart_services():
+    app.config['ns'].restart()
+    return Response("Restarting services")
+
 
 @app.route("/info-beamer/status")
 def status():
@@ -38,6 +61,7 @@ def status():
         return "running"
     else:
         return "not running"
+
 
 @app.route("/node/push", methods=['GET', 'POST'])
 def receive_node():
@@ -50,7 +74,7 @@ def receive_node():
     node_file = request.files['node.zip']
 
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
-	    os.makedirs(app.config['UPLOAD_FOLDER'])
+        os.makedirs(app.config['UPLOAD_FOLDER'])
 
     node_file_upload_path = os.path.join(app.config['UPLOAD_FOLDER'], 'node.zip')
     node_file.save(node_file_upload_path)
@@ -66,7 +90,6 @@ def main():
     t = threading.Thread(target=ssdp.worker, args=(config,))
     t.daemon = True
     t.start()
-
 
     app.config['ibs'] = InfoBeamerService(config, 'node')
     app.config['ns'] = NodeServices('node')
