@@ -7,6 +7,9 @@ setup(name='beamin_target',
       author='Louis Simons',
       author_email='lousimons@gmail.com',
       packages=['beamin_target'],
+      install_requires=[
+          'flask',
+      ],
       entry_points = {
         'console_scripts': ['beamin_target=beamin_target.server:main']
       }
